@@ -20,15 +20,19 @@ Turn a PDF of lecture slides into an importable Anki `.apkg`, one card per conte
 5. Give the user the `.apkg`. Never commit the PDF, the slide images, `.apkg` files, or `cards.json` (all gitignored).
 
 ## Front style (match exactly)
-- A bold topic title, then sub-questions as `<br>- ...` bullet lines.
+- A bold topic title ending in a colon, inside the `<b>` tag, then sub-questions as `<br>- ...` bullet lines. Two to four questions per card.
 - Questions should test understanding of the slide content.
 - Use `\(...\)` for inline LaTeX math.
+- Slide text is extracted from a PDF, so Greek letters and symbols often arrive mangled or transliterated (a lambda showing up as `L`, for instance). Write what the slide means, in proper LaTeX: `\(\lambda\)`, not `\(L\)`. Only do this where the intent is unambiguous from context.
 
 ## Back (auto-generated — never hand-write)
 The back is ONLY the slide screenshot(s): `<img src="slide-XX.jpg">`, one per slide the card covers, stacked in order. The questions are NOT repeated on the back. `build_deck.py` builds this from each card's `slides` list.
 
 ## Skip these slides
-Title pages, tables of contents, section/transition dividers, reference lists, and any slide with no meaningful exam content.
+Title pages, tables of contents whatever they are called (Outline, Agenda, Overview), section and transition dividers, reference and bibliography lists, thanks and questions slides, and any slide with no meaningful exam content.
+
+## When to merge slides
+Merge when one card's questions cannot be answered without seeing all the slides together: a definition split across a page break, a worked example continued, a diagram and its explanation. Do not merge slides that merely sit under the same heading. If each slide introduces a definition or result worth recalling on its own, keep them as separate cards.
 
 ## Notes
 - Templates and CSS live in `assets/`; do not edit casually — a single stray character breaks card rendering.

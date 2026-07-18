@@ -3,7 +3,7 @@
 << /Type /Catalog /Pages 2 0 R >>
 endobj
 2 0 obj
-<< /Type /Pages /Kids [6 0 R 8 0 R 10 0 R 12 0 R 14 0 R 16 0 R] /Count 6 >>
+<< /Type /Pages /Kids [7 0 R 9 0 R 11 0 R 13 0 R 15 0 R 17 0 R] /Count 6 >>
 endobj
 3 0 obj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
@@ -12,7 +12,10 @@ endobj
 << /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
 endobj
 5 0 obj
-<< /Length 255 >>
+<< /Type /Font /Subtype /Type1 /BaseFont /Symbol >>
+endobj
+6 0 obj
+<< /Length 259 >>
 stream
 0.12 0.12 0.12 rg 0 0 720 540 re f
 BT
@@ -27,22 +30,22 @@ ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 370 Td
+60.0 370 Td
 (Eigenvalues and Eigenvectors) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 306 Td
+60.0 306 Td
 (Autumn term) Tj
 ET
 endstream
 endobj
-6 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 5 0 R >>
-endobj
 7 0 obj
-<< /Length 357 >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 6 0 R >>
+endobj
+8 0 obj
+<< /Length 365 >>
 stream
 0.12 0.12 0.12 rg 0 0 720 540 re f
 BT
@@ -57,34 +60,34 @@ ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 370 Td
+60.0 370 Td
 (1. Definitions) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 338 Td
+60.0 338 Td
 (2. The characteristic polynomial) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 306 Td
+60.0 306 Td
 (3. Diagonalisation) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 274 Td
+60.0 274 Td
 (4. References) Tj
 ET
 endstream
 endobj
-8 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 7 0 R >>
-endobj
 9 0 obj
-<< /Length 537 >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 8 0 R >>
+endobj
+10 0 obj
+<< /Length 631 >>
 stream
 0.12 0.12 0.12 rg 0 0 720 540 re f
 BT
@@ -99,40 +102,52 @@ ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 370 Td
-(Let A be an n x n matrix. A scalar L is an eigenvalue of A) Tj
+60.0 370 Td
+(Let A be an n x n matrix. An eigenvalue of A is a scalar) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 338 Td
-(if there is a nonzero vector v with) Tj
+60.0 338 Td
+(for which the equation) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 274 Td
-(        A v = L v) Tj
+100.0 274 Td
+(A v = ) Tj
+ET
+BT
+/F3 18 Tf
+1 1 1 rg
+144.8 274 Td
+(l) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 210 Td
-(Such a v is called an eigenvector of A for L.) Tj
+154.7 274 Td
+( v) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 178 Td
-(The set of all such v, together with 0, is the eigenspace.) Tj
+60.0 210 Td
+(has a nonzero solution v. Such a v is an eigenvector of A,) Tj
+ET
+BT
+/F2 18 Tf
+1 1 1 rg
+60.0 178 Td
+(and the set of all of them, together with 0, is the eigenspace.) Tj
 ET
 endstream
 endobj
-10 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 9 0 R >>
-endobj
 11 0 obj
-<< /Length 552 >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 10 0 R >>
+endobj
+12 0 obj
+<< /Length 674 >>
 stream
 0.12 0.12 0.12 rg 0 0 720 540 re f
 BT
@@ -147,40 +162,52 @@ ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 370 Td
-(A v = L v holds for some nonzero v exactly when) Tj
+60.0 370 Td
+(The eigenvalues of A are exactly the scalars satisfying) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 306 Td
-(        det\(A - L I\) = 0) Tj
+100.0 306 Td
+(det\(A - ) Tj
+ET
+BT
+/F3 18 Tf
+1 1 1 rg
+169.5 306 Td
+(l) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 242 Td
-(The left hand side is a degree n polynomial in L,) Tj
+179.4 306 Td
+( I\) = 0) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 210 Td
-(called the characteristic polynomial of A.) Tj
+60.0 242 Td
+(The left hand side is a polynomial of degree n, called the) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 178 Td
-(Its roots are precisely the eigenvalues of A.) Tj
+60.0 210 Td
+(characteristic polynomial of A. Finding eigenvalues therefore) Tj
+ET
+BT
+/F2 18 Tf
+1 1 1 rg
+60.0 178 Td
+(means finding the roots of a polynomial.) Tj
 ET
 endstream
 endobj
-12 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 11 0 R >>
-endobj
 13 0 obj
-<< /Length 516 >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 12 0 R >>
+endobj
+14 0 obj
+<< /Length 519 >>
 stream
 0.12 0.12 0.12 rg 0 0 720 540 re f
 BT
@@ -195,40 +222,40 @@ ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 370 Td
+60.0 370 Td
 (If A has n linearly independent eigenvectors, collect them) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 338 Td
+60.0 338 Td
 (as the columns of P. Then) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 274 Td
-(        P^-1 A P = D) Tj
+100.0 274 Td
+(P^-1 A P = D) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 210 Td
+60.0 210 Td
 (where D is diagonal and holds the eigenvalues.) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 178 Td
+60.0 178 Td
 (Powers become cheap: A^k = P D^k P^-1.) Tj
 ET
 endstream
 endobj
-14 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 13 0 R >>
-endobj
 15 0 obj
-<< /Length 271 >>
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 14 0 R >>
+endobj
+16 0 obj
+<< /Length 275 >>
 stream
 0.12 0.12 0.12 rg 0 0 720 540 re f
 BT
@@ -243,41 +270,42 @@ ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 370 Td
+60.0 370 Td
 (Strang, Introduction to Linear Algebra) Tj
 ET
 BT
 /F2 18 Tf
 1 1 1 rg
-60 338 Td
+60.0 338 Td
 (Axler, Linear Algebra Done Right) Tj
 ET
 endstream
 endobj
-16 0 obj
-<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R >> >> /Contents 15 0 R >>
+17 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 720 540] /Resources << /Font << /F1 3 0 R /F2 4 0 R /F3 5 0 R >> >> /Contents 16 0 R >>
 endobj
 xref
-0 17
+0 18
 0000000000 65535 f 
 0000000009 00000 n 
 0000000058 00000 n 
 0000000149 00000 n 
 0000000224 00000 n 
 0000000294 00000 n 
-0000000600 00000 n 
-0000000736 00000 n 
-0000001144 00000 n 
-0000001280 00000 n 
-0000001868 00000 n 
-0000002005 00000 n 
-0000002609 00000 n 
-0000002747 00000 n 
-0000003315 00000 n 
-0000003453 00000 n 
-0000003776 00000 n 
+0000000361 00000 n 
+0000000671 00000 n 
+0000000817 00000 n 
+0000001233 00000 n 
+0000001379 00000 n 
+0000002062 00000 n 
+0000002210 00000 n 
+0000002936 00000 n 
+0000003084 00000 n 
+0000003655 00000 n 
+0000003803 00000 n 
+0000004130 00000 n 
 trailer
-<< /Size 17 /Root 1 0 R >>
+<< /Size 18 /Root 1 0 R >>
 startxref
-3914
+4278
 %%EOF
