@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Alessio Piroli
+# SPDX-License-Identifier: GPL-3.0-only
 """Generate tests/fixtures/sample_lecture.pdf, the deck used by the tests and README.
 
 This writes a tiny six page slide deck with no dependencies beyond the standard

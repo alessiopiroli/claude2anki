@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Copyright (C) 2026 Alessio Piroli
+# SPDX-License-Identifier: GPL-3.0-only
 """Package an Anki .apkg from lecture-slide images + a cards.json spec.
 
 Usage:
