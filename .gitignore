@@ -7,6 +7,10 @@ slide-*.jpg
 slide-*.jpeg
 cards.json
 
+# except the sample deck written for this repo, used by the tests and the README
+!tests/fixtures/*.pdf
+!docs/*.png
+
 # python
 __pycache__/
 *.pyc

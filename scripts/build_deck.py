@@ -60,12 +60,54 @@ def deck_id_from_name(name):
     return int(hashlib.md5(name.encode()).hexdigest()[:8], 16) | 0x10000000
 
 
+SLIDE_RE = re.compile(r"^slide-(\d+)\.jpg$")
+
+
 def rasterize(pdf, workdir, dpi):
+    """Rasterize the PDF to <workdir>/slide-NN.jpg, zero padded to at least 2 digits.
+
+    pdftoppm pads the page number to the width of the page count, so a 6 page deck
+    yields slide-1.jpg while a 120 page deck yields slide-001.jpg. cards.json is
+    written before the PDF is ever rasterized, so the names are normalised here to
+    a form that does not depend on how long the deck happens to be.
+    """
     os.makedirs(workdir, exist_ok=True)
     subprocess.run(
         ["pdftoppm", "-jpeg", "-r", str(dpi), pdf, os.path.join(workdir, "slide")],
         check=True,
     )
+    pages = []
+    for name in os.listdir(workdir):
+        m = SLIDE_RE.match(name)
+        if m:
+            pages.append((int(m.group(1)), name))
+    if not pages:
+        sys.exit(f"ERROR: pdftoppm produced no images in {workdir}")
+    width = max(2, len(str(max(page for page, _ in pages))))
+    for page, name in pages:
+        want = "slide-%0*d.jpg" % (width, page)
+        if want != name:
+            os.replace(os.path.join(workdir, name), os.path.join(workdir, want))
+    return width
+
+
+def resolve_slide(workdir, ref):
+    """Find the image for a cards.json slide reference, tolerating the padding used.
+
+    A card may say slide-3.jpg or slide-03.jpg; both mean page 3. Returns the real
+    path, or None if that page was not rasterized.
+    """
+    direct = os.path.join(workdir, ref)
+    if os.path.exists(direct):
+        return direct
+    m = SLIDE_RE.match(os.path.basename(ref))
+    if not m:
+        return None
+    for width in (2, 3, 4, 1):
+        alt = os.path.join(workdir, "slide-%0*d.jpg" % (width, int(m.group(1))))
+        if os.path.exists(alt):
+            return alt
+    return None
 
 
 def validate(apkg, n_expected):
@@ -108,12 +150,14 @@ def main():
         slides = c["slides"]
         if not slides:
             sys.exit(f"ERROR: a card has no slides: {front[:60]!r}")
+        names = []
         for s in slides:
-            p = os.path.join(args.workdir, s)
-            if not os.path.exists(p):
-                sys.exit(f"ERROR: card references missing image {p}")
+            p = resolve_slide(args.workdir, s)
+            if p is None:
+                sys.exit(f"ERROR: card references missing image {s} in {args.workdir}")
             media.append(p)
-        back = "<br>".join(f'<img src="{s}">' for s in slides)
+            names.append(os.path.basename(p))
+        back = "<br>".join(f'<img src="{n}">' for n in names)
         deck.add_note(genanki.Note(model=model, fields=[front, back]))
 
     pkg = genanki.Package(deck)

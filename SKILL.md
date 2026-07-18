@@ -13,7 +13,7 @@ Turn a PDF of lecture slides into an importable Anki `.apkg`, one card per conte
 2. Decide the card set using the Style and Skip rules below. Default to one card per content slide, but merge several slides into a single card whenever they cover the same topic — there is no limit of two.
 3. Write `cards.json`:
    `{"deck_name": "...", "cards": [{"front": "<b>Title:</b><br>- Q1<br>- Q2", "slides": ["slide-03.jpg"]}, ...]}`
-   - `slides` is a list; page N maps to `slide-NN.jpg` (2-digit, zero-padded). A merged card lists every slide it covers, in order.
+   - `slides` is a list; page N maps to `slide-NN.jpg` (zero-padded to 2 digits, so page 3 is `slide-03.jpg`). A merged card lists every slide it covers, in order. The packager normalizes the rasterized filenames to this form and accepts either padding, so write `slide-03.jpg` regardless of how long the deck is.
 4. Run the packager:
    `python scripts/build_deck.py --pdf <slides.pdf> --cards cards.json --out <deck>.apkg`
    It rasterizes at 200 DPI, builds each card with the fixed model, and validates.
