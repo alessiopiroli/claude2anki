@@ -32,8 +32,6 @@ apt install poppler-utils   # Debian or Ubuntu
 
 ## Install
 
-This repo is the skill, so installing it means putting it where Claude Code looks. Symlink rather than copy, and a `git pull` will keep the installed skill up to date.
-
 ```
 git clone https://github.com/alessiopiroli/claude2anki.git
 mkdir -p ~/.claude/skills
