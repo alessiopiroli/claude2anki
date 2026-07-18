@@ -1,0 +1,13 @@
+{
+  "deck_name": "Example Deck",
+  "cards": [
+    {
+      "front": "<b>Example topic:</b><br>- What does this card test?<br>- State the identity \\(a^2 + b^2 = c^2\\).",
+      "slides": ["slide-03.jpg"]
+    },
+    {
+      "front": "<b>Combined topic spanning two slides:</b><br>- What is the shared idea?",
+      "slides": ["slide-05.jpg", "slide-06.jpg"]
+    }
+  ]
+}

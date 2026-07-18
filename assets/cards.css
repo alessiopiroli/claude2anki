@@ -1,0 +1,81 @@
+.container {
+display: flex;
+flex-direction: row;
+height: 100vh;
+width: 100vw;
+position: fixed;
+top: 0; left: 0;
+background-color: #1e1e1e;
+color: white;
+overflow: hidden;
+}
+
+.pane {
+flex: 1;
+height: 100%;
+display: flex;
+flex-direction: column;
+box-sizing: border-box;
+}
+
+.question-side {
+border-right: 2px solid rgba(128, 128, 128, 0.3);
+}
+
+.scroll-content {
+flex: 1;
+padding: 20px;
+overflow-y: auto;
+}
+
+.scratchpad-container {
+flex-shrink: 0;
+height: 45vh;
+display: flex;
+flex-direction: column;
+padding: 10px;
+background: #1a1a1a;
+border-top: 2px solid #333;
+box-sizing: border-box;
+}
+
+#math-preview {
+flex: 1;
+background: #252525;
+border: 1px solid #444;
+border-radius: 4px;
+padding: 10px;
+margin-bottom: 8px;
+overflow-y: auto;
+color: white;
+font-size: 1.1em;
+white-space: pre-wrap;
+overflow-wrap: break-word;
+word-break: normal;
+}
+
+#scratchpad {
+height: 5vh;
+background: #121212;
+color: white;
+border: 1px solid #3498db;
+border-radius: 4px;
+padding: 10px;
+font-family: monospace;
+font-size: 1em;
+resize: none;
+outline: none;
+white-space: pre-wrap;
+overflow-wrap: break-word;
+word-break: normal;
+}
+
+#scratchpad:focus {
+border-color: #4CAF50;
+}
+
+.answer {
+flex: 1;
+padding: 20px;
+overflow-y: auto;
+}

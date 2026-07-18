@@ -1,0 +1,14 @@
+# generated / large / third-party IP — never commit
+*.apkg
+*.pdf
+_slides/
+slides/
+slide-*.jpg
+slide-*.jpeg
+cards.json
+
+# python
+__pycache__/
+*.pyc
+.venv/
+venv/

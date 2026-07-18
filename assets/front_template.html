@@ -1,0 +1,57 @@
+<script>
+window.MathJax = {
+tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+options: { processHtmlClass: 'tex2jax_process' }
+};
+</script>
+<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<div class="container">
+<div class="pane question-side">
+<div class="scroll-content">{{Front}}</div>
+
+<div class="scratchpad-container">
+<div id="math-preview" class="tex2jax_process"></div>
+<textarea id="scratchpad" placeholder="Type LaTeX here..."></textarea>
+</div>
+</div>
+<div class="pane answer"></div>
+</div>
+
+<script>
+(function() {
+const box = document.getElementById('scratchpad');
+const preview = document.getElementById('math-preview');
+
+function updatePreview() {
+const content = box.value;
+preview.innerHTML = content.replace(/\n/g, '<br>');
+sessionStorage.setItem('anki_scratchpad', content);
+
+if (window.MathJax && window.MathJax.typesetPromise) {
+window.MathJax.typesetPromise([preview]);
+}
+}
+
+box.addEventListener('input', updatePreview);
+
+box.addEventListener('keydown', function(e) {
+if (e.key === 'Enter' && !e.shiftKey) {
+e.preventDefault();
+if (typeof pycmd !== "undefined") { pycmd("ans"); }
+else {
+var btn = document.getElementById('ansbutton') || document.querySelector('#answer');
+if (btn) btn.click();
+}
+}
+});
+
+box.focus();
+
+var currentContent = document.querySelector('.scroll-content').innerText;
+if (window.lastCardShown !== currentContent) {
+sessionStorage.removeItem('anki_scratchpad');
+window.lastCardShown = currentContent;
+}
+})();
+</script>
