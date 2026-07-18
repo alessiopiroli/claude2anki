@@ -30,6 +30,26 @@ brew install poppler        # macOS
 apt install poppler-utils   # Debian or Ubuntu
 ```
 
+## Install
+
+This repo is the skill, so installing it means putting it where Claude Code looks. Symlink rather than copy, and a `git pull` will keep the installed skill up to date.
+
+```
+git clone https://github.com/alessiopiroli/claude2anki.git
+mkdir -p ~/.claude/skills
+ln -s "$(pwd)/claude2anki" ~/.claude/skills/claude2anki
+```
+
+That installs it for your account, in every project. To limit it to one project instead, symlink it into that project's `.claude/skills/` directory.
+
+Start a new Claude Code session afterwards, since skills are read at startup. You do not need to invoke it by name: ask for Anki cards from a slide PDF and Claude matches the request to the skill on its own.
+
+To uninstall, delete the symlink. Nothing else was written.
+
+```
+rm ~/.claude/skills/claude2anki
+```
+
 ## Usage
 
 Point Claude at a slides PDF and ask for Anki cards. If you already have a `cards.json`, run the packager yourself:
