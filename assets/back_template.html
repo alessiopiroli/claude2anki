@@ -1,12 +1,4 @@
-<script>
-window.MathJax = {
-tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-options: { processHtmlClass: 'tex2jax_process' }
-};
-</script>
-<script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-
-<div class="container">
+<div class="container back-side">
 <div class="pane question-side">
 <div class="scroll-content">{{Front}}</div>
 <div class="scratchpad-container">
@@ -19,26 +11,56 @@ options: { processHtmlClass: 'tex2jax_process' }
 
 <script>
 (function() {
-const box = document.getElementById('scratchpad');
-const preview = document.getElementById('math-preview');
-const saved = sessionStorage.getItem('anki_scratchpad');
+try {
+if (!document.querySelector('meta[name="viewport"]')) {
+var m = document.createElement('meta');
+m.name = 'viewport';
+m.content = 'width=device-width, initial-scale=1';
+document.head.appendChild(m);
+}
+} catch (e) {}
 
-if (saved) {
-box.value = saved;
-preview.innerHTML = saved.replace(/\n/g, '<br>');
-setTimeout(() => {
+try {
+if (!window.MathJax) {
+window.MathJax = {
+tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
+options: { processHtmlClass: 'tex2jax_process' }
+};
+var s = document.createElement('script');
+s.async = true;
+s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
+document.head.appendChild(s);
+}
+} catch (e) {}
+
+var box = document.getElementById('scratchpad');
+var preview = document.getElementById('math-preview');
+
+function typesetPreview(tries) {
 if (window.MathJax && window.MathJax.typesetPromise) {
 window.MathJax.typesetPromise([preview]);
+} else if (tries > 0) {
+setTimeout(function() { typesetPreview(tries - 1); }, 250);
 }
-}, 100);
+}
+
+function render(content) {
+preview.innerHTML = content
+.replace(/\$([^$\n]+)\$/g, '\\($1\\)')
+.replace(/\n/g, '<br>');
+typesetPreview(10);
+}
+
+var saved = null;
+try { saved = sessionStorage.getItem('anki_scratchpad'); } catch (e) {}
+if (saved) {
+box.value = saved;
+render(saved);
 }
 
 box.addEventListener('input', function() {
-preview.innerHTML = box.value.replace(/\n/g, '<br>');
-sessionStorage.setItem('anki_scratchpad', box.value);
-if (window.MathJax && window.MathJax.typesetPromise) {
-window.MathJax.typesetPromise([preview]);
-}
+try { sessionStorage.setItem('anki_scratchpad', box.value); } catch (e) {}
+render(box.value);
 });
 })();
 </script>

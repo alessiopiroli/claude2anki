@@ -1,24 +1,130 @@
-.container {
-display: flex;
-flex-direction: row;
-height: 100vh;
-width: 100vw;
-position: fixed;
-top: 0; left: 0;
+html, body {
+margin: 0;
+padding: 0;
+background-color: #1e1e1e;
+}
+
+.card {
+margin: 0;
+padding: 0;
 background-color: #1e1e1e;
 color: white;
-overflow: hidden;
+text-align: left;
+}
+
+/* ---------- Default layout (phones/tablets): stacked, page scrolls ---------- */
+
+.container {
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+width: 100%;
+background-color: #1e1e1e;
+color: white;
+box-sizing: border-box;
+text-align: left;
 }
 
 .pane {
-flex: 1;
-height: 100%;
 display: flex;
 flex-direction: column;
 box-sizing: border-box;
 }
 
 .question-side {
+border-bottom: 2px solid rgba(128, 128, 128, 0.3);
+}
+
+.scroll-content {
+padding: 16px;
+overflow-wrap: break-word;
+}
+
+.scratchpad-container {
+display: flex;
+flex-direction: column;
+padding: 10px;
+background: #1a1a1a;
+border-top: 2px solid #333;
+box-sizing: border-box;
+}
+
+#math-preview {
+min-height: 3em;
+background: #252525;
+border: 1px solid #444;
+border-radius: 4px;
+padding: 10px;
+margin-bottom: 8px;
+color: white;
+font-size: 1.05em;
+white-space: pre-wrap;
+overflow-wrap: break-word;
+word-break: normal;
+}
+
+#scratchpad {
+min-height: 44px;
+width: 100%;
+background: #121212;
+color: white;
+border: 1px solid #3498db;
+border-radius: 4px;
+padding: 10px;
+font-family: monospace;
+font-size: 16px; /* 16px stops iOS from auto-zooming the page on focus */
+resize: vertical;
+outline: none;
+white-space: pre-wrap;
+overflow-wrap: break-word;
+word-break: normal;
+box-sizing: border-box;
+}
+
+#scratchpad:focus {
+border-color: #4CAF50;
+}
+
+.answer {
+padding: 16px;
+overflow-wrap: break-word;
+}
+
+/* On the flipped card (stacked layout only), show the answer at the top,
+   so you don't scroll past the whole question again.
+   Delete this rule if you prefer question-then-answer order. */
+.back-side .answer {
+order: -1;
+border-bottom: 2px solid rgba(128, 128, 128, 0.3);
+}
+
+img {
+max-width: 100%;
+height: auto;
+}
+
+/* ---------- Desktop (mouse device, wide window): side-by-side split ----------
+   Keyed on hover+pointer, not just width: mobile webviews often report a fake
+   ~980px viewport width, which would wrongly trigger a width-only media query. */
+
+@media (min-width: 700px) and (hover: hover) and (pointer: fine) {
+.container {
+flex-direction: row;
+position: fixed;
+top: 0;
+left: 0;
+height: 100vh;
+width: 100vw;
+overflow: hidden;
+}
+
+.pane {
+flex: 1;
+height: 100%;
+}
+
+.question-side {
+border-bottom: none;
 border-right: 2px solid rgba(128, 128, 128, 0.3);
 }
 
@@ -30,52 +136,28 @@ overflow-y: auto;
 
 .scratchpad-container {
 flex-shrink: 0;
-height: 45vh;
-display: flex;
-flex-direction: column;
-padding: 10px;
-background: #1a1a1a;
-border-top: 2px solid #333;
-box-sizing: border-box;
+height: 40vh;
 }
 
 #math-preview {
 flex: 1;
-background: #252525;
-border: 1px solid #444;
-border-radius: 4px;
-padding: 10px;
-margin-bottom: 8px;
 overflow-y: auto;
-color: white;
-font-size: 1.1em;
-white-space: pre-wrap;
-overflow-wrap: break-word;
-word-break: normal;
 }
 
 #scratchpad {
 height: 5vh;
-background: #121212;
-color: white;
-border: 1px solid #3498db;
-border-radius: 4px;
-padding: 10px;
-font-family: monospace;
-font-size: 1em;
+min-height: 0;
 resize: none;
-outline: none;
-white-space: pre-wrap;
-overflow-wrap: break-word;
-word-break: normal;
-}
-
-#scratchpad:focus {
-border-color: #4CAF50;
 }
 
 .answer {
 flex: 1;
 padding: 20px;
 overflow-y: auto;
+}
+
+.back-side .answer {
+order: 0;
+border-bottom: none;
+}
 }

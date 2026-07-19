@@ -69,6 +69,19 @@ def test_templates_reference_their_fields():
     assert "{{Front}}" in back and "{{Back}}" in back
 
 
+def test_templates_stay_mobile_safe():
+    """Regressions here brick rendering on AnkiMobile/AnkiDroid: their webviews
+    report a fake ~980px viewport (so the desktop layout must be gated on pointer
+    capabilities, not width alone) and bundle their own MathJax (which the
+    template must not clobber)."""
+    css = build_deck.load("cards.css")
+    assert "(pointer: fine)" in css
+    for name in ("front_template.html", "back_template.html"):
+        tpl = build_deck.load(name)
+        assert "if (!window.MathJax)" in tpl
+        assert 'meta[name="viewport"]' in tpl
+
+
 def test_deck_id_is_stable():
     """If this drifts, re-imports fork into a duplicate deck instead of updating."""
     assert build_deck.deck_id_from_name("Example Deck") == 4171567930
