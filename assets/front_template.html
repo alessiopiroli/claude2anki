@@ -3,8 +3,7 @@
 <div class="scroll-content">{{Front}}</div>
 
 <div class="scratchpad-container">
-<div id="math-preview" class="tex2jax_process"></div>
-<textarea id="scratchpad" placeholder="Type LaTeX here..."></textarea>
+<div id="scratchpad" contenteditable="true" spellcheck="false" data-placeholder="Type here — $...$ renders as you finish"></div>
 </div>
 </div>
 <div class="pane answer"></div>
@@ -14,19 +13,16 @@
 (function() {
 try {
 if (!document.querySelector('meta[name="viewport"]')) {
-var m = document.createElement('meta');
-m.name = 'viewport';
-m.content = 'width=device-width, initial-scale=1';
-document.head.appendChild(m);
+var mv = document.createElement('meta');
+mv.name = 'viewport';
+mv.content = 'width=device-width, initial-scale=1';
+document.head.appendChild(mv);
 }
 } catch (e) {}
 
 try {
 if (!window.MathJax) {
-window.MathJax = {
-tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] },
-options: { processHtmlClass: 'tex2jax_process' }
-};
+window.MathJax = { tex: { inlineMath: [['$', '$'], ['\\(', '\\)']] } };
 var s = document.createElement('script');
 s.async = true;
 s.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js';
@@ -34,39 +30,165 @@ document.head.appendChild(s);
 }
 } catch (e) {}
 
-var box = document.getElementById('scratchpad');
-var preview = document.getElementById('math-preview');
+var pad = document.getElementById('scratchpad');
+var MATH_RE = /\$([^$\n]+)\$/;
 
-function typesetPreview(tries) {
+function typeset(el, tries) {
 if (window.MathJax && window.MathJax.typesetPromise) {
-window.MathJax.typesetPromise([preview]);
+window.MathJax.typesetPromise([el]);
 } else if (tries > 0) {
-setTimeout(function() { typesetPreview(tries - 1); }, 250);
+setTimeout(function() { typeset(el, tries - 1); }, 250);
 }
 }
 
-function updatePreview() {
-var content = box.value;
-preview.innerHTML = content
-.replace(/\$([^$\n]+)\$/g, '\\($1\\)')
-.replace(/\n/g, '<br>');
-try { sessionStorage.setItem('anki_scratchpad', content); } catch (e) {}
-typesetPreview(1);
+function makeChip(src) {
+var chip = document.createElement('span');
+chip.className = 'math-chip';
+chip.contentEditable = 'false';
+chip.setAttribute('data-tex', src);
+chip.textContent = '\\(' + src + '\\)';
+typeset(chip, 10);
+return chip;
 }
 
-box.addEventListener('input', updatePreview);
+function serialize() {
+function walk(node) {
+var out = '';
+for (var ch = node.firstChild; ch; ch = ch.nextSibling) {
+if (ch.nodeType === 3) out += ch.nodeValue;
+else if (ch.nodeType === 1) {
+if (ch.getAttribute && ch.getAttribute('data-tex') !== null) out += '$' + ch.getAttribute('data-tex') + '$';
+else if (ch.tagName === 'BR') out += '\n';
+else out += (out && out.slice(-1) !== '\n' ? '\n' : '') + walk(ch);
+}
+}
+return out;
+}
+return walk(pad);
+}
 
-box.addEventListener('keydown', function(e) {
-if (e.key === 'Enter' && !e.shiftKey) {
-if (typeof pycmd !== 'undefined') { e.preventDefault(); pycmd('ans'); return; }
+function save() {
+try { sessionStorage.setItem('anki_scratchpad', serialize()); } catch (e) {}
+}
+
+function caretPos() {
+var sel = window.getSelection();
+if (!sel || !sel.rangeCount || !sel.isCollapsed) return null;
+var r = sel.getRangeAt(0);
+if (!pad.contains(r.startContainer)) return null;
+return { node: r.startContainer, offset: r.startOffset };
+}
+
+function setCaret(node, offset) {
+try {
+var sel = window.getSelection();
+var r = document.createRange();
+r.setStart(node, offset);
+r.collapse(true);
+sel.removeAllRanges();
+sel.addRange(r);
+} catch (e) {}
+}
+
+function renderPending() {
+var changed = true;
+while (changed) {
+changed = false;
+var info = caretPos();
+var tw = document.createTreeWalker(pad, NodeFilter.SHOW_TEXT, null, false);
+var t;
+while ((t = tw.nextNode())) {
+if (t.parentElement && t.parentElement.closest('.math-chip')) continue;
+var m = MATH_RE.exec(t.nodeValue);
+if (!m) continue;
+var start = m.index, end = m.index + m[0].length;
+if (info && info.node === t && info.offset > start && info.offset < end) continue;
+var tail = t.splitText(end);
+var mathNode = t.splitText(start);
+var chip = makeChip(m[1]);
+mathNode.parentNode.replaceChild(chip, mathNode);
+if (info && info.node === t) {
+if (info.offset >= end) setCaret(tail, info.offset - end);
+else if (info.offset <= start) setCaret(t, info.offset);
+}
+changed = true;
+break;
+}
+}
+}
+
+function unrender(chip, mode) {
+var src = chip.getAttribute('data-tex');
+var txt = document.createTextNode('$' + src + '$');
+chip.parentNode.replaceChild(txt, chip);
+var n = txt.nodeValue.length;
+var off = (mode === 'inside-start') ? 1 : (mode === 'inside-end') ? n - 1 : n;
+setCaret(txt, off);
+save();
+}
+
+function skipEmpty(node, dir) {
+while (node && node.nodeType === 3 && !node.nodeValue.length) {
+node = dir < 0 ? node.previousSibling : node.nextSibling;
+}
+return node;
+}
+
+function chipBeside(dir) {
+var info = caretPos();
+if (!info) return null;
+var n = null;
+if (info.node.nodeType === 3) {
+if (dir < 0 && info.offset === 0) n = skipEmpty(info.node.previousSibling, dir);
+if (dir > 0 && info.offset === info.node.nodeValue.length) n = skipEmpty(info.node.nextSibling, dir);
+} else if (info.node === pad) {
+n = skipEmpty(dir < 0 ? pad.childNodes[info.offset - 1] : pad.childNodes[info.offset], dir);
+}
+return (n && n.nodeType === 1 && n.classList && n.classList.contains('math-chip')) ? n : null;
+}
+
+pad.addEventListener('input', function() { renderPending(); save(); });
+
+pad.addEventListener('click', function(e) {
+var chip = e.target && e.target.closest ? e.target.closest('.math-chip') : null;
+if (chip && pad.contains(chip)) { e.preventDefault(); unrender(chip, 'inside-end'); }
+});
+
+var renderQueued = false;
+document.addEventListener('selectionchange', function() {
+if (renderQueued) return;
+renderQueued = true;
+setTimeout(function() { renderQueued = false; renderPending(); }, 150);
+});
+
+pad.addEventListener('keydown', function(e) {
+if (e.key === 'Enter') {
+e.preventDefault();
+if (!e.shiftKey) {
+if (typeof pycmd !== 'undefined') { pycmd('ans'); return; }
 var btn = document.getElementById('ansbutton') || document.querySelector('#answer');
-if (btn) { e.preventDefault(); btn.click(); }
+if (btn) { btn.click(); return; }
+}
+document.execCommand('insertText', false, '\n');
+return;
+}
+if ((e.key === 'ArrowLeft' || e.key === 'ArrowRight') && !e.shiftKey && !e.altKey && !e.ctrlKey && !e.metaKey) {
+var beside = chipBeside(e.key === 'ArrowRight' ? 1 : -1);
+if (beside) {
+e.preventDefault();
+unrender(beside, e.key === 'ArrowRight' ? 'inside-start' : 'inside-end');
+}
+return;
+}
+if (e.key === 'Backspace') {
+var prev = chipBeside(-1);
+if (prev) { e.preventDefault(); unrender(prev, 'end'); }
 }
 });
 
 var isTouch = false;
 try { isTouch = window.matchMedia('(pointer: coarse)').matches; } catch (e) {}
-if (!isTouch) { try { box.focus(); } catch (e) {} }
+if (!isTouch) { try { pad.focus(); } catch (e) {} }
 
 try {
 var currentContent = document.querySelector('.scroll-content').innerText;

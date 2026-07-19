@@ -49,22 +49,10 @@ border-top: 2px solid #333;
 box-sizing: border-box;
 }
 
-#math-preview {
-min-height: 3em;
-background: #252525;
-border: 1px solid #444;
-border-radius: 4px;
-padding: 10px;
-margin-bottom: 8px;
-color: white;
-font-size: 1.05em;
-white-space: pre-wrap;
-overflow-wrap: break-word;
-word-break: normal;
-}
-
+/* Single live-preview scratchpad: $...$ renders in place once finished;
+   click a rendered equation (or backspace into it) to edit its source. */
 #scratchpad {
-min-height: 44px;
+min-height: 80px;
 width: 100%;
 background: #121212;
 color: white;
@@ -73,7 +61,6 @@ border-radius: 4px;
 padding: 10px;
 font-family: monospace;
 font-size: 16px; /* 16px stops iOS from auto-zooming the page on focus */
-resize: vertical;
 outline: none;
 white-space: pre-wrap;
 overflow-wrap: break-word;
@@ -83,6 +70,24 @@ box-sizing: border-box;
 
 #scratchpad:focus {
 border-color: #4CAF50;
+}
+
+#scratchpad:empty::before {
+content: attr(data-placeholder);
+color: #666;
+pointer-events: none;
+}
+
+.math-chip {
+display: inline-block;
+cursor: pointer;
+padding: 0 3px;
+border-radius: 4px;
+}
+
+.math-chip:hover {
+background: rgba(52, 152, 219, 0.25);
+outline: 1px solid rgba(52, 152, 219, 0.5);
 }
 
 .answer {
@@ -136,18 +141,13 @@ overflow-y: auto;
 
 .scratchpad-container {
 flex-shrink: 0;
-height: 40vh;
-}
-
-#math-preview {
-flex: 1;
-overflow-y: auto;
+height: 30vh;
 }
 
 #scratchpad {
-height: 5vh;
+flex: 1;
 min-height: 0;
-resize: none;
+overflow-y: auto;
 }
 
 .answer {
