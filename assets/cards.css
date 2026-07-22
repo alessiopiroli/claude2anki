@@ -15,8 +15,12 @@ text-align: left;
 /* ---------- Default layout (phones/tablets): stacked, page scrolls ---------- */
 
 .container {
-display: flex;
-flex-direction: column;
+display: grid;
+grid-template-columns: 1fr;
+grid-template-areas:
+"question"
+"answer"
+"scratch";
 min-height: 100vh;
 width: 100%;
 background-color: #1e1e1e;
@@ -32,7 +36,21 @@ box-sizing: border-box;
 }
 
 .question-side {
+grid-area: question;
 border-bottom: 2px solid rgba(128, 128, 128, 0.3);
+}
+
+.answer {
+grid-area: answer;
+}
+
+.scratchpad-container {
+grid-area: scratch;
+}
+
+/* Empty answer pane (front side, before reveal) should take up no space. */
+.answer:empty {
+padding: 0;
 }
 
 .scroll-content {
@@ -95,11 +113,9 @@ padding: 16px;
 overflow-wrap: break-word;
 }
 
-/* On the flipped card (stacked layout only), show the answer at the top,
-   so you don't scroll past the whole question again.
-   Delete this rule if you prefer question-then-answer order. */
+/* On the flipped card (stacked layout only), show the answer between the
+   question and the scratchpad, so it's clear where to look. */
 .back-side .answer {
-order: -1;
 border-bottom: 2px solid rgba(128, 128, 128, 0.3);
 }
 
@@ -114,18 +130,17 @@ height: auto;
 
 @media (min-width: 700px) and (hover: hover) and (pointer: fine) {
 .container {
-flex-direction: row;
+grid-template-columns: 1fr 1fr;
+grid-template-rows: 1fr 30vh;
+grid-template-areas:
+"question answer"
+"scratch  answer";
 position: fixed;
 top: 0;
 left: 0;
 height: 100vh;
 width: 100vw;
 overflow: hidden;
-}
-
-.pane {
-flex: 1;
-height: 100%;
 }
 
 .question-side {
@@ -140,7 +155,6 @@ overflow-y: auto;
 }
 
 .scratchpad-container {
-flex-shrink: 0;
 height: 30vh;
 }
 
@@ -151,13 +165,11 @@ overflow-y: auto;
 }
 
 .answer {
-flex: 1;
 padding: 20px;
 overflow-y: auto;
 }
 
 .back-side .answer {
-order: 0;
 border-bottom: none;
 }
 }
